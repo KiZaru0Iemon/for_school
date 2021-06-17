@@ -8,7 +8,8 @@ json_file_names = glob.glob('json_data/*.json')
 
 # === 変数定義 ===
 mother_data = []  #母データ
-range_files_num = range(len(json_file_names))  #for分簡略用変数
+files_num = len(json_file_names)
+range_files_num = range(files_num)  #for分簡略用変数
 http10_counts = [0 for i in range_files_num]
 http11_counts = [0 for i in range_files_num]
 http20_counts = [0 for i in range_files_num]
@@ -19,6 +20,11 @@ http11_percent = []
 http20_percent = []
 http30_percent = []
 h3_29_percent = []
+http10_average = 0
+http11_average = 0
+http20_average = 0
+http30_average = 0
+h3_29_average = 0
 
 # /json読み込み/
 for fname in json_file_names:
@@ -51,26 +57,26 @@ for i, protocols in enumerate(use_protocol_names):
         elif protocol == 'h3-29':
             h3_29_counts[i] += 1
 
-# print(http10_counts)
-# print(http11_counts)
-# print(http20_counts)
-# print(http30_counts)
-# print(h3_29_counts)
-
-# for i in range_files_num:
-#     print(use_protocol_names[i])
-
+# /各プロトコルの使用率/
 for i in range_files_num:
-    http10_percent.append(
-        str(http10_counts[i] / use_protocol_num[i] * 100) + '%')
-    http11_percent.append(
-        str(http11_counts[i] / use_protocol_num[i] * 100) + '%')
-    http20_percent.append(
-        str(http20_counts[i] / use_protocol_num[i] * 100) + '%')
-    http30_percent.append(
-        str(http30_counts[i] / use_protocol_num[i] * 100) + '%')
-    h3_29_percent.append(
-        str(h3_29_counts[i] / use_protocol_num[i] * 100) + '%')
+    http10_percent.append(http10_counts[i] / use_protocol_num[i] * 100)
+    http11_percent.append(http11_counts[i] / use_protocol_num[i] * 100)
+    http20_percent.append(http20_counts[i] / use_protocol_num[i] * 100)
+    http30_percent.append(http30_counts[i] / use_protocol_num[i] * 100)
+    h3_29_percent.append(h3_29_counts[i] / use_protocol_num[i] * 100)
+
+# /全体の平均計算/
+for i in range_files_num:
+    http10_average += http10_percent[i]
+    http11_average += http11_percent[i]
+    http20_average += http20_percent[i]
+    http30_average += http30_percent[i]
+    h3_29_average += h3_29_percent[i]
+http10_average /= files_num
+http11_average /= files_num
+http20_average /= files_num
+http30_average /= files_num
+h3_29_average /= files_num
 
 # /確認用/
 print('=========================================')
@@ -80,13 +86,20 @@ for i in range_files_num:
     print('url : ' + json_file_names[i][url_start:url_end] + '\n')
     print('protocol sum : ' + str(use_protocol_num[i]) + '\n')
     print('http/1.0 : ' + str(http10_counts[i]) + ' /' +
-          str(use_protocol_num[i]) + '  ' + http10_percent[i])
+          str(use_protocol_num[i]) + '  ' + str(http10_percent[i]) + '%')
     print('http/1.1 : ' + str(http11_counts[i]) + ' /' +
-          str(use_protocol_num[i]) + '  ' + http11_percent[i])
+          str(use_protocol_num[i]) + '  ' + str(http11_percent[i]) + '%')
     print('http/2.0 : ' + str(http20_counts[i]) + ' /' +
-          str(use_protocol_num[i]) + '  ' + http20_percent[i])
+          str(use_protocol_num[i]) + '  ' + str(http20_percent[i]) + '%')
     print('http/3.0 : ' + str(http30_counts[i]) + ' /' +
-          str(use_protocol_num[i]) + '  ' + http30_percent[i])
+          str(use_protocol_num[i]) + '  ' + str(http30_percent[i]) + '%')
     print('h3-29    : ' + str(h3_29_counts[i]) + ' /' +
-          str(use_protocol_num[i]) + '  ' + h3_29_percent[i])
+          str(use_protocol_num[i]) + '  ' + str(h3_29_percent[i]) + '%')
     print('\n=========================================')
+
+print('\n[the whole average]')
+print('http/1.0 : ' + str(http10_average) + ' %')
+print('http/1.1 : ' + str(http11_average) + ' %')
+print('http/2.0 : ' + str(http20_average) + ' %')
+print('http/3.0 : ' + str(http30_average) + ' %')
+print('h3-29    : ' + str(h3_29_average) + ' %')
