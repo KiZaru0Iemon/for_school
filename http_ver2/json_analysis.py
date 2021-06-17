@@ -1,3 +1,5 @@
+#仕様については，README.mdファイルを確認してください。(errorについても少し書いてあります。)
+
 import json
 import glob
 
