@@ -50,7 +50,7 @@ for i, protocols in enumerate(use_protocol_names):
             http10_counts[i] += 1
         elif protocol == 'http/1.1':
             http11_counts[i] += 1
-        elif protocol == 'http/2.0':
+        elif protocol == 'http/2.0' or protocol == 'h2' or protocol == 'h2c':
             http20_counts[i] += 1
         elif protocol == 'http/3.0':
             http30_counts[i] += 1
